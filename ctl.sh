@@ -9,14 +9,14 @@
 
 DIR_HOME=$(dirname $(realpath ${BASH_SOURCE[0]}))
 DIR_CASES=$DIR_HOME/cases
+
 DIR_WORKSHOP=$DIR_HOME/workshop
 DIR_INPUT=$DIR_HOME/input
 DIR_OUTPUT=$DIR_HOME/output
-DIR_LOGS=$DIR_HOME/logs
 
 IS_LOGGING=1
-FILE_THIS=$(basename ${BASH_SOURCE[0]})
 
+DIR_LOGS=$DIR_HOME/logs
 PATH_LOGROTATE_CONF=$DIR_LOGS/logrotate.conf
 PATH_LOGROTATE_STATE=$DIR_LOGS/logrotate.state
 TPL_LOGROTATE="# 此配置文件由 $(realpath ${BASH_SOURCE[0]}) 自动更新
@@ -32,10 +32,10 @@ $DIR_LOGS/*.log {
     compresscmd $(which xz)
     uncompresscmd $(which unxz)
     compressext .xz
-    compressoptions -9
+    compres1ions -9
 }"
 
-TPL_BG_NOHUP="CASEID=用例名称 && nohup bash -l $(realpath ${BASH_SOURCE[0]}) \$CASEID >> $DIR_LOGS/\$CASEID.log 2>&1 &"
+TPL_BG_NOHUP="CASE_ID=用例名称 && nohup bash -l $(realpath ${BASH_SOURCE[0]}) \$CASE_ID >> $DIR_LOGS/\$CASE_ID.log 2>&1 &"
 
 TPL_BG="
 # 命令行后台进程方式启动案例
@@ -48,10 +48,10 @@ $TPL_BG_NOHUP
 @daily bash -l $(realpath ${BASH_SOURCE[0]}) logrotate >> $DIR_LOGS/logrotate.journal 2>&1
 "
 
-HELP="$FILE_THIS - 数据中台CSV编解码范例控制器 https://github.com/opgcn/ds-csv-cases
+HELP="$(basename $BASH_SOURCE) - 数据中台CSV编解码范例控制器 https://github.com/opgcn/ds-csv-cases
 
 用法:
-    {CASEID}    前台运行案例 $DIR_CASES/{CASEID}.sh
+    {CASE_ID}    前台运行案例 $DIR_CASES/{CASE_ID}.sh
     bg          显示后台运行的案例的方法
     logrotate   轮转压缩${DIR_LOGS}目录中的日志
     help        显示此帮助
@@ -68,12 +68,9 @@ function echoDebug
 #   $1: debug level
 #   $2: message string
 {
-    sPos=""
-    for x in ${FUNCNAME[@]}; do
-        [ "echoDebug" != "$x" ] && [ "runCmd" != "$x" ] && sPos="${sPos}${x}@"
-    done
     if [ 1 -eq ${IS_LOGGING} ]; then
-        echo -e "\e[7;93m[${sPos}${FILE_THIS} $(date +'%F %T') $1]\e[0m \e[93m$2\e[0m" >&2
+        sPos=${CASE_ID:-$(basename -s .sh $BASH_SOURCE)}
+        echo -e "\e[7;93m$(date +'%F %T') $1 ${sPos}\e[0m \e[93m$2\e[0m" >&2
     fi
 }
 
@@ -85,29 +82,38 @@ function runCmd
     return $nRet
 }
 
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# process functions
-
-function parseOpts
+function checkCsvkit
 {
-    declare sOpt="$1"
-    if [ "$sOpt" == "help" ] || [ "$sOpt" == '' ]; then
-        echo "$HELP"
-    elif [ "$sOpt" == "bg" ]; then
-        mkdir -p $DIR_LOGS \
-        && echo "$TPL_BG"
-    elif [ "$sOpt" == "logrotate" ]; then
-        mkdir -p $DIR_LOGS \
-        && echo "$TPL_LOGROTATE" > $PATH_LOGROTATE_CONF \
-        && runCmd logrotate -v -s $PATH_LOGROTATE_STATE $PATH_LOGROTATE_CONF
-    elif [[ $sOpt == case-* ]]; then
-        runCmd source $DIR_CASES/$sOpt.sh
-    else
-        echoDebug ERROR "非法参数'$sOpt'! 请使用'$FILE_THIS help'查看帮助"
-        return 1
-    fi
+    [ "$(which in2csv 2> /dev/null)" ] || { echoDebug FATAL "依赖工具 csvkit 未安装, 请使用'pip3 install --user csvkit'等方式安装!"; return 254; }
+    return 0
+}
+
+function CheckJq
+{
+    [ "$(which jq 2> /dev/null)" ] || { echoDebug FATAL "依赖工具 jq 未安装, 请使用'sudo yum install -y jq'等方式安装!"; return 254; }
+    return 0
+}
+
+function showCaseVars
+{
+    echoDebug INFO "当前案例配置的变量:\n$(set | grep '^CASE_')"
 }
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # main process
-parseOpts $@
+
+if [ "$1" == "help" ] || [ "$1" == '' ]; then
+    echo "$HELP"
+elif [ "$1" == "bg" ]; then
+    mkdir -p $DIR_LOGS \
+    && echo "$TPL_BG"
+elif [ "$1" == "logrotate" ]; then
+    mkdir -p $DIR_LOGS \
+    && echo "$TPL_LOGROTATE" > $PATH_LOGROTATE_CONF \
+    && runCmd logrotate -v -s $PATH_LOGROTATE_STATE $PATH_LOGROTATE_CONF
+elif [[ $1 == case-* ]]; then
+    runCmd source $DIR_CASES/$1.sh
+else
+    echoDebug FATAL "非法参数'$1'! 请使用'$0 help'查看帮助"
+    exit 1
+fi
