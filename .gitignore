@@ -1,7 +1,5 @@
 /logs
-/workshop
-/input
-/output
+/case-**
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

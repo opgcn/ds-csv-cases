@@ -10,10 +10,6 @@
 DIR_HOME=$(dirname $(realpath ${BASH_SOURCE[0]}))
 DIR_CASES=$DIR_HOME/cases
 
-DIR_WORKSHOP=$DIR_HOME/workshop
-DIR_INPUT=$DIR_HOME/input
-DIR_OUTPUT=$DIR_HOME/output
-
 IS_LOGGING=1
 
 DIR_LOGS=$DIR_HOME/logs
@@ -51,7 +47,7 @@ $TPL_BG_NOHUP
 HELP="$(basename $BASH_SOURCE) - 数据中台CSV编解码范例控制器 https://github.com/opgcn/ds-csv-cases
 
 用法:
-    {CASE_ID}    前台运行案例 $DIR_CASES/{CASE_ID}.sh
+    {CASE_ID}   前台运行案例 $DIR_CASES/{CASE_ID}.sh
     bg          显示后台运行的案例的方法
     logrotate   轮转压缩${DIR_LOGS}目录中的日志
     help        显示此帮助
@@ -80,23 +76,6 @@ function runCmd
     $@
     nRet=$?; [ 0 -eq $nRet ] || echoDebug WARN "命令返回非零值: $nRet"
     return $nRet
-}
-
-function checkCsvkit
-{
-    [ "$(which in2csv 2> /dev/null)" ] || { echoDebug FATAL "依赖工具 csvkit 未安装, 请使用'pip3 install --user csvkit'等方式安装!"; return 254; }
-    return 0
-}
-
-function CheckJq
-{
-    [ "$(which jq 2> /dev/null)" ] || { echoDebug FATAL "依赖工具 jq 未安装, 请使用'sudo yum install -y jq'等方式安装!"; return 254; }
-    return 0
-}
-
-function showCaseVars
-{
-    echoDebug INFO "当前案例配置的变量:\n$(set | grep '^CASE_')"
 }
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
