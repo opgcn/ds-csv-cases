@@ -39,7 +39,7 @@ function biz_xlsx_demo
     # 工作目录中处理
     runCmd mkdir -p $TASK_TYPE_DIR_WORK || return $?
     echoDebug INFO "开始生成 $TASK_TYPE_PATH_CSVGZ"
-    in2csv -v -I -f "xlsx" --sheet "$TASK_TYPE_EXCEL_SHEET" $TASK_TYPE_PATH_EXCEL | tail -n +2 | gzip -9 > $TASK_TYPE_PATH_CSVGZ || return $?
+    in2csv -v -I --blanks -f "xlsx" --sheet "$TASK_TYPE_EXCEL_SHEET" $TASK_TYPE_PATH_EXCEL | tail -n +2 | gzip -9 > $TASK_TYPE_PATH_CSVGZ || return $?
     echoDebug INFO "生成文件字节大小: $(stat -c%s $TASK_TYPE_PATH_CSVGZ)"
     echoDebug INFO "生成文件的MD5: $(md5sum $TASK_TYPE_PATH_CSVGZ | cut -d' ' -f1 | tee $TASK_TYPE_PATH_MD5)"
 

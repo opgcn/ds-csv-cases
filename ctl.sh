@@ -7,6 +7,8 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # global configs
 
+set -o pipefail
+
 DIR_HOME=$(dirname $(realpath ${BASH_SOURCE[0]}))
 DIR_TASKS=$DIR_HOME/tasks
 
