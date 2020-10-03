@@ -83,20 +83,23 @@ function runCmd
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # main process
 
-if [ "$1" == "help" ] || [ "$1" == '' ]; then
+sTaskId=$1
+if [ "$sTaskId" == "help" ] || [ "$sTaskId" == '' ]; then
     echo "$HELP"
-elif [ "$1" == "bg" ]; then
+elif [ "$sTaskId" == "bg" ]; then
     mkdir -p $DIR_LOGS \
     && echo "$TPL_BG"
-elif [ "$1" == "logrotate" ]; then
+elif [ "$sTaskId" == "logrotate" ]; then
     mkdir -p $DIR_LOGS \
     && echo "$TPL_LOGROTATE" > $PATH_LOGROTATE_CONF \
     && runCmd logrotate -v -s $PATH_LOGROTATE_STATE $PATH_LOGROTATE_CONF
-elif [[ $1 == *.sh ]]; then
-    runCmd source $DIR_TASKS/$1
-elif [[ $1 == *.py ]]; then
-    runCmd exec python3 $DIR_TASKS/$1
+elif [[ $sTaskId == *.sh ]]; then
+    shift && echoDebug INFO "开始加载 $DIR_TASKS/$sTaskId"
+    source $DIR_TASKS/$sTaskId
+elif [[ $sTaskId == *.py ]]; then
+    shift && echoDebug INFO "开始运行 $DIR_TASKS/$sTaskId"
+    exec python3 $DIR_TASKS/$sTaskId $@
 else
-    echoDebug FATAL "非法参数'$1'! 请使用'$0 help'查看帮助"
+    echoDebug FATAL "无效子命令'$sTaskId'! 请使用'$0 help'查看帮助"
     exit 1
 fi
