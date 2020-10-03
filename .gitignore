@@ -1,5 +1,5 @@
-/logs
-/case-**
+/logs/
+/eg-**
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

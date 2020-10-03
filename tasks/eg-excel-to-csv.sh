@@ -73,8 +73,8 @@ declare -i TASK_TYPE_FAIL=0
 
 for eachType in ${TASK_TYPES[@]}; do
     TASK_TYPE_COUNT+=1
-    echoDebug INFO "开始处理第 $TASK_TYPE_COUNT 个数据类型: $TASK_TYPE"
-    $eachType || { echoDebug ERROR "数据类型 $TASK_TYPE 处理失败! 返回码: $?"; TASK_TYPE_FAIL+=1; }
+    echoDebug INFO "开始处理第 $TASK_TYPE_COUNT 个数据类型: $eachType"
+    $eachType || { echoDebug ERROR "数据类型 $eachType 处理失败! 返回码: $?"; TASK_TYPE_FAIL+=1; }
 done
 
 echoDebug INFO "任务 $TASK_ID 执行完毕, 数据类型失败 $TASK_TYPE_FAIL/${#TASK_TYPES[@]} 个"
