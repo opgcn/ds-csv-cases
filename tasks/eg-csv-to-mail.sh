@@ -42,7 +42,7 @@ function biz_csv_to_mail
     
     # 邮件
     echo "由数据中台导出的 $TASK_TYPE_PATH_CSVGZ 数据统计信息如下：" > $TASK_TYPE_PATH_CSV.stat
-    runCmd csvstat -v -H $TASK_TYPE_PATH_CSV >> $TASK_TYPE_PATH_CSV.stat
+    runCmd csvstat -v $TASK_TYPE_PATH_CSV >> $TASK_TYPE_PATH_CSV.stat
     runCmd mailx -n -v -r $TASK_SMTP_USER -s "$TASK_ID@$(hostname -I|cut -d' ' -f1)" -S smtp="$TASK_SMTP_HOST" -S smtp-auth-user="$TASK_SMTP_USER" -S smtp-auth-password="$TASK_SMTP_PASS" -S smtp-use-starttls -S smtp-auth=login -S ssl-verify=ignore -S nss-config-dir=/etc/pki/nssdb -a $TASK_TYPE_PATH_CSV ${TASK_SMTP_TO[@]} < $TASK_TYPE_PATH_CSV.stat
     
     # 日志中显示统计信息，性能较差时可以注释掉
