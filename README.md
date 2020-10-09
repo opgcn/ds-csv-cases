@@ -40,7 +40,7 @@ chmod a+x ./ctl.sh
 ---- | ----
 `eg-json-to-csv.sh` | 将JSON文件导出到CSV
 `eg-excel-to-csv.sh` | 将Excel表导出到CSV
-`eg-nginxlog-to-csv.sh` | 将ngixn的归档日志文件导出到CSV
+`eg-nginxlog-to-csv.sh` | 将nginx的归档日志文件导出到CSV
 `eg-mysql-to-csv.sh` | 将mysql表导出到CSV
 `eg-csv-to-mail.sh` | 将CSV文件转换成excel并邮寄
 `eg-api-to-csv.sh` | 访问API接口并导出到CSV
