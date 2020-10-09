@@ -34,7 +34,18 @@ chmod a+x ./ctl.sh
 
 执行任务时，只需要`./ctl.sh ${TASK_ID}`即可，控制器会完成任务调度、日志处理等功能。
 
-## 5. 常见问题：
+## 5. 已有任务案例列表
+
+任务ID | 说明
+---- | ----
+`eg-json-to-csv.sh` | 将JSON文件导出到CSV
+`eg-excel-to-csv.sh` | 将Excel表导出到CSV
+`eg-nginxlog-to-csv.sh` | 将ngixn的归档日志文件导出到CSV
+`eg-mysql-to-csv.sh` | 将mysql表导出到CSV
+`eg-csv-to-mail.sh` | 将CSV文件转换成excel并邮寄
+`eg-api-to-csv.sh` | 访问API接口并导出到CSV
+
+## 6. 常见问题：
 
 > 子任务较为复杂，需要传参时怎么办？
 
