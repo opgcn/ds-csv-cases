@@ -75,7 +75,7 @@ function echoDebug
 function runCmd
 {
     echoDebug DEBUG "命令: $*"
-    $@
+    "$@"
     nRet=$?; [ 0 -eq $nRet ] || echoDebug WARN "命令返回非零值: $nRet"
     return $nRet
 }
