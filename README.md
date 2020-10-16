@@ -1,12 +1,12 @@
 # dscsv
 
-东方明珠的数据中台的[离线文件接入](http://dsftp.opg.cn)、[实时数据流接入](https://gitlab.opg.cn/snippets/21)都要求数据**满足[CSV](https://baike.baidu.com/item/CSV/10739)格式，即遵循国际标准[RFC4180](https://tools.ietf.org/html/rfc4180)**。同时，数据中台*DSFTP*导出给业务线的离线数据报表也是*CSV*格式。
+东方明珠的数据中台的[离线文件接入](http://dsftp.opg.cn)等规范，要求数据**满足[CSV](https://baike.baidu.com/item/CSV/10739)格式，即遵循国际标准[RFC4180](https://tools.ietf.org/html/rfc4180)**。同时，数据中台*DSFTP*导出给业务线的离线数据报表也是*CSV*格式。
 
-由于业务线的研发能力参差不齐，不少数据对接业务线期望期望能用最小的开发成本来编解码这些*CSV*数据文件。此项目应运而生，它通过*控制器调度任务脚本*的模式，**支持业务侧快速的定制化实施自己的CSV编解码逻辑**，开发人员只需要具备简单的*Shell*脚本开发能力即可。
+由于业务线的研发能力参差不齐，不少业务线期望期望能用最小的开发成本来编解码这些*CSV*数据文件。此项目应运而生，它通过*控制器调度任务脚本*的模式，**支持业务侧快速的定制化实施自己的CSV编解码逻辑**，开发人员只需要具备简单的*Shell*脚本开发能力即可。
 
 ## 1. 基本概念
 
-**任务**，指一个由业务线开发和维护的脚本程度，其中通过[csvkit](https://csvkit.readthedocs.io/)、[jq](https://stedolan.github.io/jq/)等开源工具，实现业务线自己的*CSV*数据编解码逻辑，此任务在*控制器*中被加载执行。同时，可以配合[dsftp-client](https://github.com/opgcn/dsftp-client)等*传输工具*，接入或导出数据中台。每个任务可以是有始有终的批量处理，也可以是有始无终的管道处理。
+**任务**，指一个由业务线开发和维护的脚本程序，其通过[csvkit](https://csvkit.readthedocs.io/)、[jq](https://stedolan.github.io/jq/)等开源工具，实现业务线自己的*CSV*数据编解码逻辑，此任务在*控制器*中被加载执行。同时，可以配合[dsftp-client](https://github.com/opgcn/dsftp-client)等*传输工具*，接入或导出数据中台。每个任务可以是有始有终的批量处理，也可以是有始无终的管道处理。
 
 ## 2. 安装
 
@@ -37,7 +37,7 @@ chmod a+x ./ctl.sh
 `eg-csv-to-mail.sh` | 将CSV文件转换成excel并邮寄
 `eg-api-to-csv.sh` | 访问API接口并导出到CSV
 
-同时，建议业务线了解命令行开源工具[csvkit](https://csvkit.readthedocs.io/)、[jq](https://stedolan.github.io/jq/)的基本使用。
+同时，建议业务线对接数据的技术人员了解命令行开源工具[csvkit](https://csvkit.readthedocs.io/)、[jq](https://stedolan.github.io/jq/)的基本使用。
 
 ## 4. 任务的执行
 
@@ -55,6 +55,6 @@ chmod a+x ./ctl.sh
 
 > 我们子公司有牛逼的专业开发能力，不打算用你们这个很low的Shell脚本方式开发离线CSV数据上传，你们总部中台怎么看？
 
-开发语言无谓贵贱，此项目是考虑大多数子公司的实际技术能力选型的。业务线自行开发时，还是建议业务线将CSV生成模块和文件传输模块解耦开来，这样出现Bug的时候方便定位和修复。
+开发语言无谓贵贱，此项目是考虑大多数子公司的实际技术能力选型的。业务线自行开发时，还是建议业务线将*CSV生成模块*和*文件传输模块*解耦开来，这样出现Bug的时候方便定位和修复。
 
 
