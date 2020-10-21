@@ -5,6 +5,7 @@
 # sudo yum install -y python3
 # sudo yum install -y mailx # 除了mailx，同时推荐命令行发SMTP邮件的神器swaks
 # pip3 install --user csvkit
+# [ "root" == "$USER" ] && ln -sf $HOME/.local/bin $HOME/bin || true # 建议对于root用户/root/bin软链指向/root/.local/bin
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # 全局配置

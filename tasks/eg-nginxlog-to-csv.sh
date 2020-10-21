@@ -4,6 +4,7 @@
 # 此任务需要提前安装以下依赖：
 # sudo yum install -y python3
 # pip3 install --user csvkit
+# [ "root" == "$USER" ] && ln -sf $HOME/.local/bin $HOME/bin || true # 建议对于root用户/root/bin软链指向/root/.local/bin
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # 全局配置
